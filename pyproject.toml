@@ -1,0 +1,68 @@
+[project]
+name = "flairr-ts"
+version = "0.1.0"
+description = "FLAIRR-TS: Forecasting LLM-Agents with Iterative Refinement and Retrieval for Time Series – OWID Energy Dataset"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+  { name = "Implementation based on Jalori, Verma & Arik (EMNLP 2025)" }
+]
+keywords = ["time-series", "forecasting", "llm", "agents", "langchain", "anthropic"]
+
+dependencies = [
+  # ── LLM / Agent orchestration ─────────────────────────────────────────────
+  "langchain>=0.2.0",
+  "langchain-core>=0.2.0",
+  "langchain-anthropic>=0.1.23",
+  "langgraph>=0.1.0",
+  # ── Anthropic SDK ─────────────────────────────────────────────────────────
+  "anthropic>=0.28.0",
+  # ── Data processing ───────────────────────────────────────────────────────
+  "pandas>=2.2.0",
+  "numpy>=1.26.0",
+  "scipy>=1.13.0",
+  "requests>=2.31.0",
+  # ── Config & validation ───────────────────────────────────────────────────
+  "pydantic>=2.7.0",
+  "python-dotenv>=1.0.0",
+  # ── Output & visualisation ────────────────────────────────────────────────
+  "rich>=13.7.0",
+  "matplotlib>=3.8.0",
+  # ── Resilience ────────────────────────────────────────────────────────────
+  "tenacity>=8.3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2.0",
+  "pytest-cov>=5.0.0",
+  "ruff>=0.4.0",
+]
+
+[project.scripts]
+flairr-ts = "main:cli_main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+# ── uv workspace / tool settings ──────────────────────────────────────────────
+[tool.uv]
+dev-dependencies = [
+  "pytest>=8.2.0",
+  "pytest-cov>=5.0.0",
+  "ruff>=0.4.0",
+]
+
+# ── Ruff linter ───────────────────────────────────────────────────────────────
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "I", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
