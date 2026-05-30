@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs and editors
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+
+# Local configuration / secrets
+.env
+.env.*
+!.env.example
+
+# Testing and linting
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Data and Outputs
+energy-data-master/
+results/
+outputs/
+*.csv
+*.xlsx
+*.json
