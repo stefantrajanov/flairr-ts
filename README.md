@@ -115,7 +115,7 @@ uv run main.py \
 |---------------------------|------------------------|------------------------------------------|
 | `ANTHROPIC_API_KEY`       | *(required)*           | Anthropic API key                        |
 | `FLAIRR_FORECASTER_MODEL` | `claude-haiku-4-5`     | Model for the Forecaster agent           |
-| `FLAIRR_REFINER_MODEL`    | `claude-sonnet-4-5`    | Model for the Refiner agent              |
+| `FLAIRR_REFINER_MODEL`    | `claude-sonnet-4-6`    | Model for the Refiner agent              |
 | `FLAIRR_CONTEXT_LENGTH`   | `10`                   | L – context window (years)               |
 | `FLAIRR_HORIZON`          | `3`                    | H – forecast horizon (years)             |
 | `FLAIRR_TOP_M`            | `2`                    | M – retrieved analogues                  |
