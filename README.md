@@ -2,7 +2,7 @@
 
 > **F**orecasting **L**LM-**A**gents with **I**terative **R**efinement and **R**etrieval for **T**ime **S**eries
 
-Python implementation of the FLAIRR-TS framework (Jalori, Verma & Arik – EMNLP 2025), applied to the [Our World in Data Energy Dataset](https://github.com/owid/energy-data).
+A Python implementation of the FLAIRR-TS framework (Jalori, Verma & Arik – EMNLP 2025), built on top of the [Our World in Data Energy Dataset](https://github.com/owid/energy-data).
 
 ---
 
@@ -13,14 +13,14 @@ OWID Energy CSV
       │
       ▼
 ┌─────────────────────────┐
-│  Data Partitioner       │  Slice → Context window (L yrs)
-│  + Gap Filler           │          Eval window   (H yrs)
-└────────────┬────────────┘          Historical DB (all prior)
+│  Data Partitioner       │  Produces: Context window (L yrs)
+│  + Gap Filler           │           Eval window   (H yrs)
+└────────────┬────────────┘           Historical DB (all prior)
              │
              ▼
 ┌─────────────────────────┐
 │  Retrieval Agent        │  Pearson r → top-M analogues
-│  (Deterministic)        │  (few-shot RAG context)
+│  (Deterministic)        │  used as few-shot RAG context
 └────────────┬────────────┘
              │
     ┌────────▼────────┐
@@ -60,18 +60,19 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 # 2. Clone / enter the project
 cd iterative-prompt-refinement-with-agents-for-time-series-data
 
-# 3. Create virtual environment and install all dependencies
+# 3. Create a virtual environment and install all dependencies
 uv sync
 
 # For development tools (pytest, ruff):
 uv sync --extra dev
 
-# 4. Configure environment
+# 4. Set up environment variables
 cp .env.example .env
-# → Edit .env and set ANTHROPIC_API_KEY
+# → Open .env and fill in your ANTHROPIC_API_KEY
 ```
 
-The OWID dataset is **auto-downloaded** on first run. To use a local copy:
+The OWID dataset is **downloaded automatically** on first run. To point to a local copy instead:
+
 ```bash
 OWID_DATA_PATH=energy-data-master/owid-energy-data.csv
 ```
@@ -81,7 +82,7 @@ OWID_DATA_PATH=energy-data-master/owid-energy-data.csv
 ## Usage
 
 ```bash
-# Discover available data
+# Browse available data
 uv run main.py --list-countries
 uv run main.py --list-indicators
 
@@ -91,7 +92,7 @@ uv run main.py \
     --indicator electricity_demand \
     --y-current 2018
 
-# Custom hyperparameters
+# Override default hyperparameters
 uv run main.py \
     --country "United States" \
     --indicator primary_energy_consumption \
@@ -99,7 +100,7 @@ uv run main.py \
     --L 12 --H 5 --M 3 \
     --max-iter 7
 
-# Save results to JSON
+# Export results to a JSON file
 uv run main.py \
     --country France \
     --indicator fossil_share_elec \
@@ -111,17 +112,17 @@ uv run main.py \
 
 ## Configuration
 
-| Env variable              | Default                | Description                              |
-|---------------------------|------------------------|------------------------------------------|
-| `ANTHROPIC_API_KEY`       | *(required)*           | Anthropic API key                        |
-| `FLAIRR_FORECASTER_MODEL` | `claude-haiku-4-5`     | Model for the Forecaster agent           |
-| `FLAIRR_REFINER_MODEL`    | `claude-sonnet-4-6`    | Model for the Refiner agent              |
-| `FLAIRR_CONTEXT_LENGTH`   | `10`                   | L – context window (years)               |
-| `FLAIRR_HORIZON`          | `3`                    | H – forecast horizon (years)             |
-| `FLAIRR_TOP_M`            | `2`                    | M – retrieved analogues                  |
-| `FLAIRR_MAX_ITERATIONS`   | `5`                    | Max refinement iterations                |
-| `FLAIRR_STOP_THRESHOLD`   | `0.05`                 | τ – relative MAE improvement threshold   |
-| `OWID_DATA_PATH`          | *(auto-download)*      | Local path to owid-energy-data.csv       |
+| Environment Variable      | Default           | Description                              |
+|---------------------------|-------------------|------------------------------------------|
+| `ANTHROPIC_API_KEY`       | *(required)*      | Your Anthropic API key                   |
+| `FLAIRR_FORECASTER_MODEL` | `claude-haiku-4-5`  | Model used by the Forecaster agent       |
+| `FLAIRR_REFINER_MODEL`    | `claude-sonnet-4-6` | Model used by the Refiner agent          |
+| `FLAIRR_CONTEXT_LENGTH`   | `10`              | L – context window in years              |
+| `FLAIRR_HORIZON`          | `3`               | H – forecast horizon in years            |
+| `FLAIRR_TOP_M`            | `2`               | M – number of retrieved analogues        |
+| `FLAIRR_MAX_ITERATIONS`   | `5`               | Maximum number of refinement iterations  |
+| `FLAIRR_STOP_THRESHOLD`   | `0.05`            | τ – early-stop MAE improvement threshold |
+| `OWID_DATA_PATH`          | *(auto-download)* | Local path to owid-energy-data.csv       |
 
 ---
 
@@ -156,10 +157,10 @@ uv run main.py \
 ## Running Tests
 
 ```bash
-# Run all tests (no API keys needed)
+# Run the full test suite (no API keys required)
 uv run pytest
 
-# With coverage report
+# Include a coverage report
 uv run pytest --cov=src --cov-report=term-missing
 ```
 
